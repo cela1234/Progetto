@@ -125,28 +125,33 @@ public class Progetto {
             int p = Integer.parseInt(resolveTask[1]);
             int q = Integer.parseInt(resolveTask[2]);
             int r = Integer.parseInt(resolveTask[3]);
+            Task2(p, r, q, macchinari, prodotti, lavoratori);
 
         }
         else if (resolveTask[0].equalsIgnoreCase("TASK3"))
         {
-            Prodotto[] prodottiSequenza = new Prodotto[Integer.parseInt(resolveTask[1])];
-            for(int i = 0; i < prodottiSequenza.length; i++)
+            Prodotto[] sequenzaProdotti = new Prodotto[Integer.parseInt(resolveTask[1])];
+            for(int i = 0; i < sequenzaProdotti.length; i++)
             {
                 String idProdottoSequenza = input.nextLine();
-                for(int j = 0; j < prodotti.length; j++){
-                    if (idProdottoSequenza.equals(prodotti[j].getId())) prodottiSequenza[i]=prodotti[j];
-                }
+                sequenzaProdotti[i] = findProdottoById(prodotti, idProdottoSequenza);
             }
+            Task3(macchinari, prodotti, lavoratori, sequenzaProdotti);
         }
     }
-    public Macchinario findMacchinarioById(Macchinario[] m, String id){
+    static Macchinario findMacchinarioById(Macchinario[] m, String id){
         for (int i = 0; i < m.length; i++){
             if (m[i].getId().equals(id)) return m[i];
         }
         return null;
     }
-
-    public void Task2(int p, int r, int q, Macchinario[] macchinari, Prodotto[] prodotti, Lavoratore[] lavoratori){
+    static Prodotto findProdottoById(Prodotto[] p, String id){
+        for (int i = 0; i < p.length; i++){
+            if (p[i].getId().equals(id)) return p[i];
+        }
+        return null;
+    }
+    static void Task2(int p, int r, int q, Macchinario[] macchinari, Prodotto[] prodotti, Lavoratore[] lavoratori){
         //1
         int contatoreT2P1=0;
         for (int i = 0; i < macchinari.length; i++){
@@ -207,6 +212,9 @@ public class Progetto {
             System.out.println("YES");
         }
         else System.out.println("NO");
+    }
+    static void Task3(Macchinario[] macchinari, Prodotto[] prodotti, Lavoratore[] lavoratori, Prodotto[] sequenzaProdotti){
+
     }
     static void StampaNumeroProdottiPerCategoria(Prodotto v[])
     {

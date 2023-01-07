@@ -23,7 +23,6 @@ public class Progetto {
             toAnalyze = input.nextLine();
             String[] datiLavoratore = toAnalyze.split(" ");
             lavoratori[i] = new Lavoratore(datiLavoratore[0], datiLavoratore[1], datiLavoratore[2], Integer.parseInt(datiLavoratore[3]), datiLavoratore[4]);
-            System.out.println("ciao");
         }
         for(int i = 0; i < 3; i++){
             /*
@@ -77,6 +76,7 @@ public class Progetto {
             String[] catenaArray = ArrayDaAnalizzare[3].split("->");
             ArrayList<String> catena = new ArrayList<>();
             for(int j = 0; j < catenaArray.length; j++) {catena.add(catenaArray[j]);}
+            prodotti[i] = new Prodotto(ArrayDaAnalizzare[0], ArrayDaAnalizzare[1], Integer.parseInt(ArrayDaAnalizzare[2]), catena);
         }
         for(int i = 0; i < lavoratori.length; i++){
             toAnalyze = input.nextLine();
@@ -108,14 +108,25 @@ public class Progetto {
             System.out.println(NumeroLavoratoriNonCoerenti(lavoratori,macchinari));
             //1.5
             //Il numero di macchinari per ogni zona
-            for(String s : zone)
-                System.out.print(ContaMacchinariPerZona(macchinari,s));
-            System.out.print("\n");
+            String stringaZone = "";
+            for(String s : zone){
+                if (s!="E"){
+                    stringaZone = stringaZone + ContaMacchinariPerZona(macchinari,s) + " ";
+                }else stringaZone = stringaZone + ContaMacchinariPerZona(macchinari,s);
+            }
+            System.out.println(stringaZone);
+            //System.out.print("\n");
             //1.6
             //Il numero di macchinari distinti utilizzati per produrre i prodotti finali per ogni categoria
-            System.out.print(NumeroMacchinariPerCategoriaProdotto(prodotti,"micro")+ " ");
-            System.out.print(NumeroMacchinariPerCategoriaProdotto(prodotti,"macro")+ " ");
-            System.out.print(NumeroMacchinariPerCategoriaProdotto(prodotti,"aggregato")+ "\n");
+            String macchinariPerCategoria = "";
+            macchinariPerCategoria = NumeroMacchinariPerCategoriaProdotto(prodotti,"micro")+ " " +
+                                     NumeroMacchinariPerCategoriaProdotto(prodotti,"macro")+ " " +
+                                     NumeroMacchinariPerCategoriaProdotto(prodotti,"aggregato");
+            System.out.println(macchinariPerCategoria);
+            //System.out.print(NumeroMacchinariPerCategoriaProdotto(prodotti,"micro")+ " ");
+            //System.out.print(NumeroMacchinariPerCategoriaProdotto(prodotti,"macro")+ " ");
+            //System.out.print(NumeroMacchinariPerCategoriaProdotto(prodotti,"aggregato")+ "\n");
+
             //1.7
             //La categoria del prodotto finale con la catena di macchinari più lunga
             StampaCategoriaProdottoConCatenaPiuLunga(prodotti);

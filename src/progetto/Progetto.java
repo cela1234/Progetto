@@ -97,13 +97,25 @@ public class Progetto {
         else if (resolveTask[0].equalsIgnoreCase("TASK2")) //formato task2 nell'input: "TASK2 "
         {
             int p = Integer.parseInt(resolveTask[1]);
-            int 
+            int q = Integer.parseInt(resolveTask[2]);
+            int r = Integer.parseInt(resolveTask[3]);
         }
         else if (resolveTask[0].equalsIgnoreCase("TASK3"))
         {
-
-            input.nextLine();
-            input.nextLine();
+            Prodotto[] prodottiSequenza = new Prodotto[Integer.parseInt(resolveTask[1])];
+            for(int i = 0; i < prodottiSequenza.length; i++)
+            {
+                String idProdottoSequenza = input.nextLine();
+                for(int j = 0; j < prodotti.length; j++){
+                    if (idProdottoSequenza.equals(prodotti[j].getId())) prodottiSequenza[i]=prodotti[j];
+                }
+            }
         }
+    }
+    public Macchinario findMacchinarioById(Macchinario[] m, String id){
+        for (int i = 0; i < m.length; i++){
+            if (m[i].getId().equals(id)) return m[i];
+        }
+        return null;
     }
 }

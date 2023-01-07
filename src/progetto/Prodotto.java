@@ -6,7 +6,7 @@ public class Prodotto {
     private String id;
     private String categoria;
     private int tempoDiProduzione;
-    ArrayList<String> catenaDiMacchinari;
+    private ArrayList<String> catenaDiMacchinari;
 
     public Prodotto(String id, String categoria, int tempoDiProduzione, ArrayList<String> catenaDiMacchinari){
         this.id = id;

@@ -118,4 +118,67 @@ public class Progetto {
         }
         return null;
     }
+
+    public void Task2(int p, int r, int q, Macchinario[] macchinari, Prodotto[] prodotti, Lavoratore[] lavoratori){
+        //1
+        int contatoreT2P1=0;
+        for (int i = 0; i < macchinari.length; i++){
+            if (macchinari[i].getIdMacchinariInConflitto().size()<=q) contatoreT2P1++;
+        }
+        //2
+        int contatoreT2P2=0;
+        for (int i = 0; i < macchinari.length; i++){
+            if (macchinari[i].numOre()>=r) contatoreT2P2++;
+        }
+        //3
+        boolean T2P3 = true;
+        int contatoreConflitti;
+        for(int i = 0; i < macchinari.length; i++){
+            contatoreConflitti = 0;
+            for(int j = 0; j < macchinari.length; j++){
+                if(i!=j){
+                    if(macchinari[j].getIdMacchinariInConflitto().contains(macchinari[i].getId())){
+                        contatoreConflitti++;
+                        if (contatoreConflitti > 1) T2P3 = false;
+                    }
+                }
+            }
+        }
+        //4
+        boolean T2P4 = true;
+        boolean[] tipoProdottoTrovati = new boolean[3];
+        int numeroProdottiInCuiIlMacchinarioEImpiegato = 0;
+        for(int i = 0; i < macchinari.length; i++){
+            tipoProdottoTrovati[0] = false;
+            tipoProdottoTrovati[1] = false;
+            tipoProdottoTrovati[2] = false;
+            numeroProdottiInCuiIlMacchinarioEImpiegato = 0;
+            for(int j = 0; j < prodotti.length; j++){
+                if(prodotti[j].getCatenaDiMacchinari().contains(macchinari[i].getId())){
+                    switch(prodotti[j].getCategoria().toLowerCase()){
+                        case "micro":
+                            if (tipoProdottoTrovati[0]) T2P4 = false;
+
+                            else tipoProdottoTrovati[0]=true;
+                            break;
+                        case "macro":
+                            if (tipoProdottoTrovati[1]) T2P4 = false;
+                            else tipoProdottoTrovati[1]=true;
+                            break;
+                        case "aggregato":
+                            if (tipoProdottoTrovati[2]) T2P4 = false;
+                            else tipoProdottoTrovati[2]=true;
+                            break;
+                        default:
+                    }
+                    numeroProdottiInCuiIlMacchinarioEImpiegato++;
+                    if (numeroProdottiInCuiIlMacchinarioEImpiegato > 2) T2P4 = false;
+                }
+            }
+        }
+        if((contatoreT2P1<=p) && (contatoreT2P2<=p) && (T2P3) && (T2P4)){
+            System.out.println("YES");
+        }
+        else System.out.println("NO");
+    }
 }

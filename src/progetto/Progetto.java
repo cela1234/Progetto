@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 public class Progetto {
     public static void main(String[] Args){
+        String[] zone = {"A","B","C","D","E"};
         Macchinario macchinari[];
         Lavoratore lavoratori[];
         Prodotto prodotti[];
@@ -93,12 +94,38 @@ public class Progetto {
         if (resolveTask[0].equalsIgnoreCase("TASK1"))
         {
             //task1
+            //1.1 Il numero totale di prodotti finali creati e il numero totale di macchinari utilizzati per crearli
+            System.out.println(prodotti.length +" "+ macchinari.length);
+
+            //1.2
+            //il numero totale di prodotti finali creati per ogni categoria
+            StampaNumeroProdottiPerCategoria(prodotti);
+            //1.3
+            //L'ID del macchinario più utilizzato per creare i prodotti finali
+            System.out.println(IdMacchinarioPiuUtilizzato(prodotti,macchinari));
+            //1.4
+            //Il numero di lavoratori non coerenti
+            System.out.println(NumeroLavoratoriNonCoerenti(lavoratori,macchinari));
+            //1.5
+            //Il numero di macchinari per ogni zona
+            for(String s : zone)
+                System.out.print(ContaMacchinariPerZona(macchinari,s));
+            System.out.print("\n");
+            //1.6
+            //Il numero di macchinari distinti utilizzati per produrre i prodotti finali per ogni categoria
+            System.out.print(NumeroMacchinariPerCategoriaProdotto(prodotti,"micro")+ " ");
+            System.out.print(NumeroMacchinariPerCategoriaProdotto(prodotti,"macro")+ " ");
+            System.out.print(NumeroMacchinariPerCategoriaProdotto(prodotti,"aggregato")+ "\n");
+            //1.7
+            //La categoria del prodotto finale con la catena di macchinari più lunga
+            StampaCategoriaProdottoConCatenaPiuLunga(prodotti);
         }
         else if (resolveTask[0].equalsIgnoreCase("TASK2")) //formato task2 nell'input: "TASK2 "
         {
             int p = Integer.parseInt(resolveTask[1]);
             int q = Integer.parseInt(resolveTask[2]);
             int r = Integer.parseInt(resolveTask[3]);
+
         }
         else if (resolveTask[0].equalsIgnoreCase("TASK3"))
         {
@@ -181,4 +208,114 @@ public class Progetto {
         }
         else System.out.println("NO");
     }
+    static void StampaNumeroProdottiPerCategoria(Prodotto v[])
+    {
+        int nMacro=0,nMicro=0,nAggregato=0;
+        for (Prodotto prodotto : v) {
+            String c = prodotto.getCategoria();
+            switch (c) {
+                case "micro" -> nMicro++;
+                case "aggregato" -> nAggregato++;
+                case "macro" -> nMacro++;
+            }
+        }
+        System.out.println(nMicro+" "+nMacro+" "+nAggregato);
+    }
+    static String IdMacchinarioPiuUtilizzato(Prodotto p[], Macchinario m[])
+    {
+        int[] utilizzi = new int[m.length];
+
+        for (Prodotto prodotto : p) {
+            ArrayList<String> macchinariUsati = prodotto.getCatenaDiMacchinari();
+            // scorro tutti i macchinari usati da p[i]
+            for (String idMacchinario : macchinariUsati) {
+                int n = 0;
+                while (!idMacchinario.equals(m[n].getId()))
+                    n++;
+                //ora ho l'indice del macchinario nel vettore m
+                utilizzi[n]++;
+            }
+        }
+        //ora ho il vettore utilizzi, parallelo al vettore m, con gli utilizzi di ciascun macchinario
+        //trovo il più utilizzato
+        int indiceFinale=0;
+        for(int i=0; i<m.length;i++)
+        {
+            if(utilizzi[i]>utilizzi[indiceFinale])
+                indiceFinale=i;
+            else if(utilizzi[i]==utilizzi[indiceFinale])
+            { //se hanno lo stesso numero di utilizzi, prendo chi precede in alfabeto
+                if(m[i].getId().compareToIgnoreCase(m[indiceFinale].getId())<0)
+                    indiceFinale=i;
+            }
+        }
+        return m[indiceFinale].getId();
+    }
+    static boolean Coerente(Lavoratore l, Macchinario m[])
+    {
+        ArrayList<String> mLavoratore=l.getMacchinariLavoratore();
+        for (String s : mLavoratore) {
+            int indiceMacchinario = 0;
+            while (!s.equals(m[indiceMacchinario].getId()))
+                indiceMacchinario++;
+            if (!m[indiceMacchinario].getTipologia().equals(l.getRuolo()))
+                return false;
+        }
+        return true;
+    }
+    static int NumeroLavoratoriNonCoerenti(Lavoratore l[], Macchinario m[])
+    {
+        int n=0;
+        for (Lavoratore lavoratore : l)
+            if (!Coerente(lavoratore, m))
+                n++;
+        return n;
+    }
+
+    static int ContaMacchinariPerZona(Macchinario m[], String zona)
+    {
+        int n=0;
+        for( Macchinario mac : m)
+            if(mac.getBloccoLavorativo().equals(zona))
+                n++;
+        return n;
+    }
+
+    static int NumeroMacchinariPerCategoriaProdotto(Prodotto p[],String categoria)
+    {
+        ArrayList<String> idMacchinari=new ArrayList<>();
+        for (Prodotto prodotto : p) {
+            if (prodotto.getCategoria().equals(categoria)) { // se il prodotto è della categoria che mi interessa mi salvo l'id dei macchinari utilizzati per costruirlo
+                // se non l'avessi già salvato
+                ArrayList<String> catenaMacchinari = prodotto.getCatenaDiMacchinari();
+                //scorro tuttti i macchinari
+                for (String s : catenaMacchinari) {
+                    //per ogni macchinario, se non è già nella lista idMacchinari lo aggiungo
+                    boolean presente = false;
+                    for (String value : idMacchinari)
+                        if (value.equals(s)) {
+                            presente = true;
+                            break;
+                        }
+                    if (!presente)
+                        idMacchinari.add(s);
+                }
+            }
+        }
+        return idMacchinari.size();
+    }
+    static void StampaCategoriaProdottoConCatenaPiuLunga(Prodotto p[])
+    {
+        //prima trovo il prodotto con la catena più lunga, poi ne stampo la categoria
+        int[] lCatena = new int[p.length]; //array parallelo ai prodotti con la lunghezza della catena
+        int indexMaggiore=0;
+        for(int i=0; i< p.length;i++)
+        {
+            lCatena[i] = p[i].getCatenaDiMacchinari().size();
+            if(lCatena[i]>lCatena[indexMaggiore])
+                indexMaggiore=i;
+        }
+        System.out.println(p[indexMaggiore].getCategoria());
+    }
+
 }

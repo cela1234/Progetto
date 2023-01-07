@@ -152,15 +152,15 @@ public class Progetto {
         return null;
     }
     static void Task2(int p, int r, int q, Macchinario[] macchinari, Prodotto[] prodotti, Lavoratore[] lavoratori){
-        //1
+        //1: Vi sono al più p macchinari con al più q conflitti
         int contatoreT2P1=0;
         for (int i = 0; i < macchinari.length; i++){
-            if (macchinari[i].getIdMacchinariInConflitto().size()<=q) contatoreT2P1++;
+            if (macchinari[i].getIdMacchinariInConflitto().size()<=q) contatoreT2P1++; //aumento il contatore se il numero di macchinari in conflitto é minore o uguale a q
         }
-        //2
+        //2: Vi sono al più p macchinari il cui slot temporale è formato da almeno r ore
         int contatoreT2P2=0;
         for (int i = 0; i < macchinari.length; i++){
-            if (macchinari[i].numOre()>=r) contatoreT2P2++;
+            if (macchinari[i].numOre()>=r) contatoreT2P2++; //se il numero di ore del macchinario supera r, allora aumento il contatore di 1
         }
         //3
         boolean T2P3 = true;

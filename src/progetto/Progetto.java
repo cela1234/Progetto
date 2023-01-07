@@ -96,11 +96,14 @@ public class Progetto {
         }
         else if (resolveTask[0].equalsIgnoreCase("TASK2")) //formato task2 nell'input: "TASK2 "
         {
-            //task2
+            int p = Integer.parseInt(resolveTask[1]);
+            int 
         }
         else if (resolveTask[0].equalsIgnoreCase("TASK3"))
         {
-            //task3
+
+            input.nextLine();
+            input.nextLine();
         }
     }
 }

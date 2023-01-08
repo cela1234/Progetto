@@ -59,4 +59,11 @@ public class Macchinario {
     public void setRuolo(String ruolo) {
         this.ruolo = ruolo;
     }
+    public boolean conflittoConMacchinario(String idMacchinario)
+    {
+        for (String s : idMacchinariInConflitto)
+            if(s.equals(idMacchinario))
+                return true;
+        return false;
+    }
 }

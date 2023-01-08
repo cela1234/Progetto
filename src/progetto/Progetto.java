@@ -2,6 +2,8 @@ package progetto;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Progetto {
@@ -144,13 +146,7 @@ public class Progetto {
         }
         else if (resolveTask[0].equalsIgnoreCase("TASK3"))
         {
-            Prodotto[] sequenzaProdotti = new Prodotto[Integer.parseInt(resolveTask[1])];
-            for(int i = 0; i < sequenzaProdotti.length; i++)
-            {
-                String idProdottoSequenza = input.nextLine();
-                sequenzaProdotti[i] = findProdottoById(prodotti, idProdottoSequenza);
-            }
-            Task3(macchinari, prodotti, lavoratori, sequenzaProdotti);
+            Task3(macchinari, prodotti);
         }
     }
     static Macchinario findMacchinarioById(Macchinario[] m, String id){
@@ -227,7 +223,71 @@ public class Progetto {
         }
         else System.out.println("NO");
     }
-    static void Task3(Macchinario[] macchinari, Prodotto[] prodotti, Lavoratore[] lavoratori, Prodotto[] sequenzaProdotti){
+    static void Task3(Macchinario[] macchinari, Prodotto[] prodotti){
+        /*Una sequenza di prodotti finali da creare è valida se le seguenti condizioni sono tutte vere:
+        1. per ogni prodotto nella sequenza, la sua catena non ha due o più macchinari i cui slot
+        temporali sono sovrapposti; due slot temporali si dicono sovrapposti se hanno almeno 1 ora
+        in comune;
+        2. l'intera sequenza deve avere almeno prodotto per ogni categoria ed entrambe le tipologie
+        di macchinari devono essere utilizzati in ogni catena;
+        3. per ogni prodotto nella sequenza, la sua catena può contenere al più due macchinari in
+        conflitto.
+        * */
+
+        //1)
+        boolean T3P1=false;
+        for(int i=0; i< macchinari.length&& !T3P1;i++)
+            for(int x=i+1; x<macchinari.length && !T3P1;x++) //controllo dal macchinario successivo
+                if(macchinari[i].oreSovrapposte(macchinari[x].getRangeOrario()))
+                    T3P1=true;
+        //2)
+        //(if prodotti.lenght < 3, false)
+        boolean c1=false,c2=false,c3=false; //categorie
+        for(Prodotto p: prodotti)
+            if(!c1 || !c2 || !c3) //controllo che intera sequenza abbia almeno un prodotto per ogni cat
+            {
+                switch (p.getCategoria()) {
+                    case "micro" -> c1 = true;
+                    case "macro" -> c2 = true;
+                    case "aggregato" -> c3 = true;
+                }
+            }
+        boolean T3P2=c1&&c2&&c3;
+        for(int i =0; i<prodotti.length && T3P2;i++)
+        {
+            boolean tipo1=false,tipo2=false;
+            //controllo che entrambe tipologie del macchinario siano presenti in ogni catena
+            for(int x=0; x<prodotti[i].getCatenaDiMacchinari().size() && (!tipo1 || !tipo2);i++)
+            {
+                String tipoM= Objects.requireNonNull(findMacchinarioById(macchinari, prodotti[i].getCatenaDiMacchinari().get(x))).getTipologia();
+                if(tipoM.equals("pezzo"))
+                    tipo1=true;
+                if(tipoM.equals("utensile"))
+                    tipo2=true;
+            }
+            if(!(tipo1&&tipo2))
+                T3P2=false;
+        }
+        // 3) posso avere al max 2 macchinari in conflitto per ogni catena
+        boolean T3P3=true;
+        for(int i =0; i<prodotti.length && T3P3;i++) //controllo ogni prodotto
+        {
+            int conflitti=0;
+            for(String s1 : prodotti[i].getCatenaDiMacchinari()) //per ogni macchinario della catena del prodotto
+            {
+                Macchinario m1= findMacchinarioById(macchinari, s1);
+                for(String s2 : prodotti[i].getCatenaDiMacchinari()) //controllo tutti i macchinari per vedere se
+                    if(m1.conflittoConMacchinario(s2))              //conflittano con m1
+                        conflitti++;
+            }
+            if(conflitti>2)
+                T3P3=false;
+        }
+
+        if(T3P1&&T3P2&&T3P3)
+            System.out.println("VALID");
+        else
+            System.out.println("NOT VALID");
 
     }
     static void StampaNumeroProdottiPerCategoria(Prodotto v[])

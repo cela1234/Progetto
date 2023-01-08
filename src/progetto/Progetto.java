@@ -146,7 +146,13 @@ public class Progetto {
         }
         else if (resolveTask[0].equalsIgnoreCase("TASK3"))
         {
-            Task3(macchinari, prodotti);
+            Prodotto[] sequenzaProdotti = new Prodotto[Integer.parseInt(resolveTask[1])];
+            for(int i = 0; i < sequenzaProdotti.length; i++)
+            {
+                String idProdottoSequenza = input.nextLine();
+                sequenzaProdotti[i] = findProdottoById(prodotti, idProdottoSequenza);
+            }
+            Task3(macchinari, sequenzaProdotti);
         }
     }
     static Macchinario findMacchinarioById(Macchinario[] m, String id){
@@ -223,7 +229,7 @@ public class Progetto {
         }
         else System.out.println("NO");
     }
-    static void Task3(Macchinario[] macchinari, Prodotto[] prodotti){
+    static void Task3(Macchinario[] macchinari, Prodotto[] sequenzaProdotti){
         /*Una sequenza di prodotti finali da creare è valida se le seguenti condizioni sono tutte vere:
         1. per ogni prodotto nella sequenza, la sua catena non ha due o più macchinari i cui slot
         temporali sono sovrapposti; due slot temporali si dicono sovrapposti se hanno almeno 1 ora
@@ -243,7 +249,7 @@ public class Progetto {
         //2)
         //(if prodotti.lenght < 3, false)
         boolean c1=false,c2=false,c3=false; //categorie
-        for(Prodotto p: prodotti)
+        for(Prodotto p: sequenzaProdotti)
             if(!c1 || !c2 || !c3) //controllo che intera sequenza abbia almeno un prodotto per ogni cat
             {
                 switch (p.getCategoria()) {
@@ -253,13 +259,13 @@ public class Progetto {
                 }
             }
         boolean T3P2=c1&&c2&&c3;
-        for(int i =0; i<prodotti.length && T3P2;i++)
+        for(int i =0; i<sequenzaProdotti.length && T3P2;i++)
         {
             boolean tipo1=false,tipo2=false;
             //controllo che entrambe tipologie del macchinario siano presenti in ogni catena
-            for(int x=0; x<prodotti[i].getCatenaDiMacchinari().size() && (!tipo1 || !tipo2);i++)
+            for(int x=0; x<sequenzaProdotti[i].getCatenaDiMacchinari().size() && (!tipo1 || !tipo2);i++)
             {
-                String tipoM= Objects.requireNonNull(findMacchinarioById(macchinari, prodotti[i].getCatenaDiMacchinari().get(x))).getTipologia();
+                String tipoM= Objects.requireNonNull(findMacchinarioById(macchinari, sequenzaProdotti[i].getCatenaDiMacchinari().get(x))).getTipologia();
                 if(tipoM.equals("pezzo"))
                     tipo1=true;
                 if(tipoM.equals("utensile"))
@@ -270,13 +276,13 @@ public class Progetto {
         }
         // 3) posso avere al max 2 macchinari in conflitto per ogni catena
         boolean T3P3=true;
-        for(int i =0; i<prodotti.length && T3P3;i++) //controllo ogni prodotto
+        for(int i =0; i<sequenzaProdotti.length && T3P3;i++) //controllo ogni prodotto
         {
             int conflitti=0;
-            for(String s1 : prodotti[i].getCatenaDiMacchinari()) //per ogni macchinario della catena del prodotto
+            for(String s1 : sequenzaProdotti[i].getCatenaDiMacchinari()) //per ogni macchinario della catena del prodotto
             {
                 Macchinario m1= findMacchinarioById(macchinari, s1);
-                for(String s2 : prodotti[i].getCatenaDiMacchinari()) //controllo tutti i macchinari per vedere se
+                for(String s2 : sequenzaProdotti[i].getCatenaDiMacchinari()) //controllo tutti i macchinari per vedere se
                     if(m1.conflittoConMacchinario(s2))              //conflittano con m1
                         conflitti++;
             }

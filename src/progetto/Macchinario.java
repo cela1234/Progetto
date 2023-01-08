@@ -8,6 +8,7 @@ public class Macchinario {
     private int rangeOrario[];
     private String tipologia;
     private ArrayList<String> idMacchinariInConflitto;
+    private String ruolo;
 
     public Macchinario(String id, String bloccoLavorativo, int a, int b, String tipologia, ArrayList<String> idMacchinariInConflitto){
         rangeOrario = new int[2];
@@ -17,6 +18,7 @@ public class Macchinario {
         rangeOrario[1] = b;
         this.tipologia = tipologia;
         this.idMacchinariInConflitto = idMacchinariInConflitto;
+        this.ruolo=null;
     }
 
     public int numOre(){
@@ -50,4 +52,11 @@ public class Macchinario {
     }
 
 
+    public String getRuolo() {
+        return ruolo;
+    }
+
+    public void setRuolo(String ruolo) {
+        this.ruolo = ruolo;
+    }
 }

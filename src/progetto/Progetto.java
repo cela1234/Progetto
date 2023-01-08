@@ -70,6 +70,9 @@ public class Progetto {
             for(int j = 0; j < macchinariInConflitto.length; j++) { conflitti.add(macchinariInConflitto[j]);}
             macchinari[i] = new Macchinario(ArrayDaAnalizzare[0], ArrayDaAnalizzare[1], Integer.parseInt(numeriRange[0]), Integer.parseInt(numeriRange[1]), ArrayDaAnalizzare[3], conflitti);
         }
+        //una volta popolato l'array macchinari, gli assegno il ruolo
+        AssegnaRuoloMacchinari(macchinari,idMacchinariWorker,idMacchinariManager,idMacchinariExecutive);
+
         for(int i = 0; i < prodotti.length; i++){
             toAnalyze = input.nextLine();
             String[] ArrayDaAnalizzare = toAnalyze.split(" ");
@@ -277,7 +280,7 @@ public class Progetto {
             int indiceMacchinario = 0;
             while (!s.equals(m[indiceMacchinario].getId()))
                 indiceMacchinario++;
-            if (!m[indiceMacchinario].getTipologia().equals(l.getRuolo()))
+            if (!m[indiceMacchinario].getRuolo().equals(l.getRuolo()))
                 return false;
         }
         return true;
@@ -337,4 +340,21 @@ public class Progetto {
         System.out.println(p[indexMaggiore].getCategoria());
     }
 
+    static void AssegnaRuoloMacchinari(Macchinario m[], ArrayList<String> MW, ArrayList<String> MM, ArrayList<String> ME)
+    {
+        for(Macchinario mac : m)
+        {
+            for (int i=0; i<MW.size() && mac.getRuolo()==null; i++ )
+                if (mac.getId().equals(MW.get(i)))
+                    mac.setRuolo("worker");
+
+            for (int i=0; i<MM.size() && mac.getRuolo()==null; i++ )
+                if (mac.getId().equals(MM.get(i)))
+                    mac.setRuolo("manager");
+
+            for (int i=0; i<ME.size() && mac.getRuolo()==null; i++ )
+                if (mac.getId().equals(ME.get(i)))
+                    mac.setRuolo("executive");
+        }
+    }
 }

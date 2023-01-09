@@ -171,14 +171,14 @@ public class Progetto {
         //1: Vi sono al più p macchinari con al più q conflitti
         int contatoreT2P1=0;
         for (int i = 0; i < macchinari.length; i++){
-            if (macchinari[i].getIdMacchinariInConflitto().size()<=q) contatoreT2P1++; //aumento il contatore se il numero di macchinari in conflitto é minore o uguale a q
+            if (macchinari[i].getIdMacchinariInConflitto().size()>q) contatoreT2P1++; //aumento il contatore se il numero di macchinari in conflitto é minore o uguale a q
         }
         //2: Vi sono al più p macchinari il cui slot temporale è formato da almeno r ore
         int contatoreT2P2=0;
         for (int i = 0; i < macchinari.length; i++){
             if (macchinari[i].numOre()>=r) contatoreT2P2++; //se il numero di ore del macchinario supera r, allora aumento il contatore di 1
         }
-        //3
+        //3: Per ogni macchinario, vi è al più un altro macchinario che è ha un conflitto verso esso,
         boolean T2P3 = true;
         int contatoreConflitti;
         for(int i = 0; i < macchinari.length; i++){
@@ -186,43 +186,47 @@ public class Progetto {
             for(int j = 0; j < macchinari.length; j++){
                 if(i!=j){
                     if(macchinari[j].getIdMacchinariInConflitto().contains(macchinari[i].getId())){
-                        contatoreConflitti++;
+                        contatoreConflitti++;   //se per il macchinario i conflitti verso di esso supera 1 allora la terza condizione sará false
                         if (contatoreConflitti > 1) T2P3 = false;
                     }
                 }
             }
         }
-        //4
+        //4: Per ogni macchinario, esso è impiegato per al più due prodotti con categoria diversa tra loro.
         boolean T2P4 = true;
         boolean[] tipoProdottoTrovati = new boolean[3];
-        int numeroProdottiInCuiIlMacchinarioEImpiegato = 0;
+        int numeroCategorieInCuiIlMacchinarioEImpiegato = 0;
         for(int i = 0; i < macchinari.length; i++){
             tipoProdottoTrovati[0] = false;
             tipoProdottoTrovati[1] = false;
             tipoProdottoTrovati[2] = false;
-            numeroProdottiInCuiIlMacchinarioEImpiegato = 0;
+            numeroCategorieInCuiIlMacchinarioEImpiegato = 0;
             for(int j = 0; j < prodotti.length; j++){
                 if(prodotti[j].getCatenaDiMacchinari().contains(macchinari[i].getId())){
                     switch(prodotti[j].getCategoria().toLowerCase()){
                         case "micro":
-                            if (tipoProdottoTrovati[0]) T2P4 = false;
-
-                            else tipoProdottoTrovati[0]=true;
+                            if(!tipoProdottoTrovati[0]) {
+                                tipoProdottoTrovati[0]= true;
+                                numeroCategorieInCuiIlMacchinarioEImpiegato++;
+                            }
                             break;
                         case "macro":
-                            if (tipoProdottoTrovati[1]) T2P4 = false;
-                            else tipoProdottoTrovati[1]=true;
+                            if(!tipoProdottoTrovati[1]) {
+                                tipoProdottoTrovati[1]= true;
+                                numeroCategorieInCuiIlMacchinarioEImpiegato++;
+                            }
                             break;
                         case "aggregato":
-                            if (tipoProdottoTrovati[2]) T2P4 = false;
-                            else tipoProdottoTrovati[2]=true;
+                            if(!tipoProdottoTrovati[2]) {
+                                tipoProdottoTrovati[2]= true;
+                                numeroCategorieInCuiIlMacchinarioEImpiegato++;
+                            }
                             break;
                         default:
                     }
-                    numeroProdottiInCuiIlMacchinarioEImpiegato++;
-                    if (numeroProdottiInCuiIlMacchinarioEImpiegato > 2) T2P4 = false;
                 }
             }
+            if(numeroCategorieInCuiIlMacchinarioEImpiegato>2) T2P4 = false;
         }
         if((contatoreT2P1<=p) && (contatoreT2P2<=p) && (T2P3) && (T2P4)){
             System.out.println("YES");

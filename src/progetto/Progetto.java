@@ -245,11 +245,17 @@ public class Progetto {
         * */
 
         //1)
-        boolean T3P1=false;
-        for(int i=0; i< macchinari.length&& !T3P1;i++)
-            for(int x=i+1; x<macchinari.length && !T3P1;x++) //controllo dal macchinario successivo
-                if(macchinari[i].oreSovrapposte(macchinari[x].getRangeOrario()))
-                    T3P1=true;
+        boolean T3P1=true; //se rimane true è VALID
+        for(Prodotto p: sequenzaProdotti)
+        {
+            Macchinario[] sequenzaMacchinari = new Macchinario[p.getCatenaDiMacchinari().size()];
+            for(int i=0; i<sequenzaMacchinari.length;i++)
+                sequenzaMacchinari[i]=findMacchinarioById(macchinari,p.getCatenaDiMacchinari().get(i));
+            for (int i = 0; i < sequenzaMacchinari.length && T3P1; i++)
+                for (int x =i+1; x < sequenzaMacchinari.length && T3P1; x++) //controllo dal macchinario successivo
+                    if (sequenzaMacchinari[i].oreSovrapposte(sequenzaMacchinari[x].getRangeOrario()))
+                        T3P1 = false;
+        }
         //2)
         //(if prodotti.lenght < 3, false)
         boolean c1=false,c2=false,c3=false; //categorie
@@ -272,7 +278,7 @@ public class Progetto {
                 String tipoM= Objects.requireNonNull(findMacchinarioById(macchinari, sequenzaProdotti[i].getCatenaDiMacchinari().get(x))).getTipologia();
                 if(tipoM.equals("pezzo"))
                     tipo1=true;
-                if(tipoM.equals("utensile"))
+                else if(tipoM.equals("utensile"))
                     tipo2=true;
             }
             if(!(tipo1&&tipo2))
@@ -300,6 +306,7 @@ public class Progetto {
             System.out.println("NOT VALID");
 
     }
+
     static void StampaNumeroProdottiPerCategoria(Prodotto v[])
     {
         int nMacro=0,nMicro=0,nAggregato=0;

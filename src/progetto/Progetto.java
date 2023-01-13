@@ -1,8 +1,6 @@
 package progetto;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -73,7 +71,7 @@ public class Progetto {
             macchinari[i] = new Macchinario(ArrayDaAnalizzare[0], ArrayDaAnalizzare[1], Integer.parseInt(numeriRange[0]), Integer.parseInt(numeriRange[1]), ArrayDaAnalizzare[3], conflitti);
         }
         //una volta popolato l'array macchinari, gli assegno il ruolo
-        AssegnaRuoloMacchinari(macchinari,idMacchinariWorker,idMacchinariManager,idMacchinariExecutive);
+        assegnaRuoloMacchinari(macchinari,idMacchinariWorker,idMacchinariManager,idMacchinariExecutive);
 
         for(int i = 0; i < prodotti.length; i++){
             toAnalyze = input.nextLine();
@@ -104,29 +102,29 @@ public class Progetto {
 
             //1.2
             //il numero totale di prodotti finali creati per ogni categoria
-            StampaNumeroProdottiPerCategoria(prodotti);
+            stampaNumeroProdottiPerCategoria(prodotti);
             //1.3
             //L'ID del macchinario più utilizzato per creare i prodotti finali
-            System.out.println(IdMacchinarioPiuUtilizzato(prodotti,macchinari));
+            System.out.println(idMacchinarioPiuUtilizzato(prodotti,macchinari));
             //1.4
             //Il numero di lavoratori non coerenti
-            System.out.println(NumeroLavoratoriNonCoerenti(lavoratori,macchinari));
+            System.out.println(numeroLavoratoriNonCoerenti(lavoratori,macchinari));
             //1.5
             //Il numero di macchinari per ogni zona
             String stringaZone = "";
             for(String s : zone){
                 if (s!="E"){
-                    stringaZone = stringaZone + ContaMacchinariPerZona(macchinari,s) + " ";
-                }else stringaZone = stringaZone + ContaMacchinariPerZona(macchinari,s);
+                    stringaZone = stringaZone + contaMacchinariPerZona(macchinari,s) + " ";
+                }else stringaZone = stringaZone + contaMacchinariPerZona(macchinari,s);
             }
             System.out.println(stringaZone);
             //System.out.print("\n");
             //1.6
             //Il numero di macchinari distinti utilizzati per produrre i prodotti finali per ogni categoria
             String macchinariPerCategoria = "";
-            macchinariPerCategoria = NumeroMacchinariPerCategoriaProdotto(prodotti,"micro")+ " " +
-                                     NumeroMacchinariPerCategoriaProdotto(prodotti,"macro")+ " " +
-                                     NumeroMacchinariPerCategoriaProdotto(prodotti,"aggregato");
+            macchinariPerCategoria = numeroMacchinariPerCategoriaProdotto(prodotti,"micro")+ " " +
+                                     numeroMacchinariPerCategoriaProdotto(prodotti,"macro")+ " " +
+                                     numeroMacchinariPerCategoriaProdotto(prodotti,"aggregato");
             System.out.println(macchinariPerCategoria);
             //System.out.print(NumeroMacchinariPerCategoriaProdotto(prodotti,"micro")+ " ");
             //System.out.print(NumeroMacchinariPerCategoriaProdotto(prodotti,"macro")+ " ");
@@ -134,7 +132,7 @@ public class Progetto {
 
             //1.7
             //La categoria del prodotto finale con la catena di macchinari più lunga
-            StampaCategoriaProdottoConCatenaPiuLunga(prodotti);
+            stampaCategoriaProdottoConCatenaPiuLunga(prodotti);
         }
         else if (resolveTask[0].equalsIgnoreCase("TASK2")) //formato task2 nell'input: "TASK2 "
         {
@@ -321,7 +319,7 @@ public class Progetto {
 
     }
 
-    static void StampaNumeroProdottiPerCategoria(Prodotto v[])
+    static void stampaNumeroProdottiPerCategoria(Prodotto v[])
     {
         int nMacro=0,nMicro=0,nAggregato=0;
         for (Prodotto prodotto : v) {
@@ -334,7 +332,7 @@ public class Progetto {
         }
         System.out.println(nMicro+" "+nMacro+" "+nAggregato);
     }
-    static String IdMacchinarioPiuUtilizzato(Prodotto p[], Macchinario m[])
+    static String idMacchinarioPiuUtilizzato(Prodotto p[], Macchinario m[])
     {
         int[] utilizzi = new int[m.length];
 
@@ -364,7 +362,7 @@ public class Progetto {
         }
         return m[indiceFinale].getId();
     }
-    static boolean Coerente(Lavoratore l, Macchinario m[])
+    static boolean coerente(Lavoratore l, Macchinario m[])
     {
         ArrayList<String> mLavoratore=l.getMacchinariLavoratore();
         for (String s : mLavoratore) {
@@ -376,16 +374,16 @@ public class Progetto {
         }
         return true;
     }
-    static int NumeroLavoratoriNonCoerenti(Lavoratore l[], Macchinario m[])
+    static int numeroLavoratoriNonCoerenti(Lavoratore l[], Macchinario m[])
     {
         int n=0;
         for (Lavoratore lavoratore : l)
-            if (!Coerente(lavoratore, m))
+            if (!coerente(lavoratore, m))
                 n++;
         return n;
     }
 
-    static int ContaMacchinariPerZona(Macchinario m[], String zona)
+    static int contaMacchinariPerZona(Macchinario m[], String zona)
     {
         int n=0;
         for( Macchinario mac : m)
@@ -394,7 +392,7 @@ public class Progetto {
         return n;
     }
 
-    static int NumeroMacchinariPerCategoriaProdotto(Prodotto p[],String categoria)
+    static int numeroMacchinariPerCategoriaProdotto(Prodotto p[], String categoria)
     {
         ArrayList<String> idMacchinari=new ArrayList<>();
         for (Prodotto prodotto : p) {
@@ -417,7 +415,7 @@ public class Progetto {
         }
         return idMacchinari.size();
     }
-    static void StampaCategoriaProdottoConCatenaPiuLunga(Prodotto p[])
+    static void stampaCategoriaProdottoConCatenaPiuLunga(Prodotto p[])
     {
         //prima trovo il prodotto con la catena più lunga, poi ne stampo la categoria
         int[] lCatena = new int[p.length]; //array parallelo ai prodotti con la lunghezza della catena
@@ -431,7 +429,7 @@ public class Progetto {
         System.out.println(p[indexMaggiore].getCategoria());
     }
 
-    static void AssegnaRuoloMacchinari(Macchinario m[], ArrayList<String> MW, ArrayList<String> MM, ArrayList<String> ME)
+    static void assegnaRuoloMacchinari(Macchinario m[], ArrayList<String> MW, ArrayList<String> MM, ArrayList<String> ME)
     {
         for(Macchinario mac : m)
         {

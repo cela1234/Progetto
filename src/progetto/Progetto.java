@@ -177,7 +177,9 @@ public class Progetto {
             ArrayList<String> possibiliConflitti = macchinari[i].getIdMacchinariInConflitto();
             int numeroConflittiMacchinario = 0;
             for (String s: possibiliConflitti) {
-                if(macchinari[i].inConflitto(findMacchinarioById(macchinari, s)));
+                if(macchinari[i].inConflitto(findMacchinarioById(macchinari, s))){
+                    numeroConflittiMacchinario++;
+                }
             }
             if(numeroConflittiMacchinario > q) contatoreT2P1++;
         }

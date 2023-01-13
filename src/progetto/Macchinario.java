@@ -51,7 +51,6 @@ public class Macchinario {
         return idMacchinariInConflitto;
     }
 
-
     public String getRuolo() {
         return ruolo;
     }
@@ -64,6 +63,16 @@ public class Macchinario {
         for (String s : idMacchinariInConflitto)
             if(s.equals(idMacchinario))
                 return true;
+        return false;
+    }
+
+    public boolean inConflitto(Macchinario macchinarioDaControllare){
+        for (String s: idMacchinariInConflitto) {
+            if (s.equals(macchinarioDaControllare.getId())) {
+                if (macchinarioDaControllare.getBloccoLavorativo() == this.bloccoLavorativo) return true;
+                else return false; //ritorno qui false perché tanto un macchhinario non puó essere contenuto due volte nella stessa lista conflitti
+            }
+        }
         return false;
     }
 }

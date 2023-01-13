@@ -170,8 +170,16 @@ public class Progetto {
     static void Task2(int p, int r, int q, Macchinario[] macchinari, Prodotto[] prodotti, Lavoratore[] lavoratori){
         //1: Vi sono al più p macchinari con al più q conflitti
         int contatoreT2P1=0;
+        //for (int i = 0; i < macchinari.length; i++){
+        //    if (macchinari[i].getIdMacchinariInConflitto().size()>q) contatoreT2P1++; //aumento il contatore se il numero di macchinari in conflitto é minore o uguale a q
+        //}
         for (int i = 0; i < macchinari.length; i++){
-            if (macchinari[i].getIdMacchinariInConflitto().size()>q) contatoreT2P1++; //aumento il contatore se il numero di macchinari in conflitto é minore o uguale a q
+            ArrayList<String> possibiliConflitti = macchinari[i].getIdMacchinariInConflitto();
+            int numeroConflittiMacchinario = 0;
+            for (String s: possibiliConflitti) {
+                if(macchinari[i].inConflitto(findMacchinarioById(macchinari, s)));
+            }
+            if(numeroConflittiMacchinario > q) contatoreT2P1++;
         }
         //2: Vi sono al più p macchinari il cui slot temporale è formato da almeno r ore
         int contatoreT2P2=0;
@@ -185,8 +193,12 @@ public class Progetto {
             contatoreConflitti = 0;
             for(int j = 0; j < macchinari.length; j++){
                 if(i!=j){
-                    if(macchinari[j].getIdMacchinariInConflitto().contains(macchinari[i].getId())){
-                        contatoreConflitti++;   //se per il macchinario i conflitti verso di esso supera 1 allora la terza condizione sará false
+                    //if(macchinari[j].getIdMacchinariInConflitto().contains(macchinari[i].getId())){
+                    //   contatoreConflitti++;   //se per il macchinario i conflitti verso di esso supera 1 allora la terza condizione sará false
+                    //    if (contatoreConflitti > 1) T2P3 = false;
+                    //}
+                    if(macchinari[j].inConflitto(macchinari[i])){
+                        contatoreConflitti++;
                         if (contatoreConflitti > 1) T2P3 = false;
                     }
                 }
@@ -434,4 +446,5 @@ public class Progetto {
                     mac.setRuolo("executive");
         }
     }
+
 }

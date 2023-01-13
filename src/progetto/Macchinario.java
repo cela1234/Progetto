@@ -70,7 +70,7 @@ public class Macchinario {
         for (String s: idMacchinariInConflitto) {
             if (s.equals(macchinarioDaControllare.getId())) {
                 if (macchinarioDaControllare.getBloccoLavorativo() == this.bloccoLavorativo) return true;
-                else return false; //ritorno qui false perché tanto un macchhinario non puó essere contenuto due volte nella stessa lista conflitti
+                else return false; //ritorno qui false perché tanto un macchinario non puó essere contenuto due volte nella stessa lista conflitti
             }
         }
         return false;

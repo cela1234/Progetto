@@ -307,7 +307,7 @@ public class Progetto {
             {
                 Macchinario m1= findMacchinarioById(macchinari, s1);
                 for(String s2 : sequenzaProdotti[i].getCatenaDiMacchinari()) //controllo tutti i macchinari per vedere se
-                    if(m1.conflittoConMacchinario(s2))              //conflittano con m1
+                    if(m1.inConflitto(findMacchinarioById(macchinari,s2)))              //conflittano con m1
                         conflitti++;
             }
             if(conflitti>2)

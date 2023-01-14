@@ -423,9 +423,10 @@ public class Progetto {
         for(int i=0; i< p.length;i++)
         {
             lCatena[i] = p[i].getCatenaDiMacchinari().size();
-            if(lCatena[i]==lCatena[indexMaggiore])
-                if(p[i].getCategoria().compareToIgnoreCase(p[indexMaggiore].getCategoria())<0)
-                    indexMaggiore=i;
+            if(lCatena[i]==lCatena[indexMaggiore]) {
+                if (p[i].getCategoria().compareToIgnoreCase(p[indexMaggiore].getCategoria()) < 0)
+                    indexMaggiore = i;
+            }
             else if(lCatena[i]>lCatena[indexMaggiore])
                 indexMaggiore=i;
         }

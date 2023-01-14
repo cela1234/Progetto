@@ -184,7 +184,7 @@ public class Progetto {
         //2: Vi sono al più p macchinari il cui slot temporale è formato da almeno r ore
         int contatoreT2P2=0;
         for (int i = 0; i < macchinari.length; i++){
-            if (macchinari[i].numOre()>=r) contatoreT2P2++; //se il numero di ore del macchinario supera r, allora aumento il contatore di 1
+            if (macchinari[i].numOre()>=r) contatoreT2P2++; //se il numero di ore del macchinario supera o e' uguale a r, allora aumento il contatore di 1
         }
         //3: Per ogni macchinario, vi è al più un altro macchinario che è ha un conflitto verso esso,
         boolean T2P3 = true;

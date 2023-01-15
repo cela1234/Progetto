@@ -285,7 +285,7 @@ public class Progetto {
         {
             boolean tipo1=false,tipo2=false;
             //controllo che entrambe tipologie del macchinario siano presenti in ogni catena
-            for(int x=0; x<sequenzaProdotti[i].getCatenaDiMacchinari().size() && (!tipo1 || !tipo2);i++)
+            for(int x=0; x<sequenzaProdotti[i].getCatenaDiMacchinari().size() && (!tipo1 || !tipo2); x++)
             {
                 String tipoM= Objects.requireNonNull(findMacchinarioById(macchinari, sequenzaProdotti[i].getCatenaDiMacchinari().get(x))).getTipologia();
                 if(tipoM.equals("pezzo"))
